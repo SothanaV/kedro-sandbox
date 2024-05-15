@@ -1,0 +1,12 @@
+sql.customer:
+    type: dsmDataset.databaseDataset.DatabaseDataset
+    credentials: chinookdb
+    table_name: customer
+    index_col: CustomerId
+
+l.customer:
+    type: dsmDataset.dsmDataset.DaskDataset
+    credentials: bucket
+    directory: landing
+    name: customer
+    
