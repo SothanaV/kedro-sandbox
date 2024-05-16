@@ -12,5 +12,12 @@ def create_pipeline(**kwargs) -> Pipeline:
             func=nodes.pass_data, 
             inputs="sql.customer",
             outputs="l.customer", 
-            name="landing_customer")
+            name="landing_customer"
+        ),
+        node(
+            func=nodes.pass_data, 
+            inputs="l.customer",
+            outputs="i.customer", 
+            name="integration_customer"
+        )
     ])

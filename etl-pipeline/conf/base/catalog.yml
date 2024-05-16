@@ -9,4 +9,14 @@ l.customer:
     credentials: bucket
     directory: landing
     name: customer
-    
+    mode: overwrite
+
+i.customer:
+    type: dsmDataset.dsmDataset.DaskDataset
+    credentials: bucket
+    directory: integration
+    name: customer
+    mode: append
+    # mode: overwrite
+    save_args:
+        partition_on: ["SupportRepId", "State"]
