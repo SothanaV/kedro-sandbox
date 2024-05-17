@@ -1,4 +1,5 @@
 import s3fs
+import asyncio
 
 class CustomS3filesystem(s3fs.S3FileSystem):
 
@@ -31,17 +32,22 @@ class CustomS3filesystem(s3fs.S3FileSystem):
         # out = await self._call_s3(
         #     "delete_objects", kwargs, Bucket=bucket, Delete=delete_keys
         # )
-        
+
         _delete_keys_ori = [elm.get('Key') for elm in delete_keys.get('Objects', [])]
         _delete_keys = [f"{bucket}/{elm}" for elm in _delete_keys_ori]
         out = {
             'Deleted': delete_keys.get('Objects', [])
         }
+        _task = []
         for elm in _delete_keys:
             try:
-                await self._rm_file(elm)
+                _task.append(self._rm_file(elm))
             except Exception as e:
                 pass
+        try:
+            await asyncio.gather(*_task)
+        except Exception as e:
+            pass
         
         # TODO: we report on successes but don't raise on any errors, effectively
         #  on_error="omit"
